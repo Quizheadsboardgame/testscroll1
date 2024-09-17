@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Carousel with Swipe</title>
+    <title>Image Grid</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap">
     <style>
         body {
             background-color: #0CC0DF;
@@ -15,36 +16,44 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            text-align: center;
         }
 
-        .carousel {
-            display: flex;
-            overflow: hidden;
+        .carousel-container {
+            position: relative;
             width: 100%;
             max-width: 90vw; /* Adjusted for better fit on mobile */
-            position: relative;
         }
 
-        .carousel-inner {
-            display: flex;
-            transition: transform 0.3s ease-in-out; /* Smooth transition */
-            will-change: transform;
+        .title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.5em;
+            color: black;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
         }
 
-        .carousel img {
-            width: 100px;
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .image-grid img {
+            width: 100%;
             height: auto;
-            margin: 10px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .carousel img:hover {
+        .image-grid img:hover {
             transform: scale(1.05); /* Slightly larger on hover */
         }
 
-        .carousel img.active {
+        .image-grid img.active {
             width: 80vw; /* Adjusted to fit well on different screen sizes */
             height: auto;
             position: fixed;
@@ -55,10 +64,6 @@
             margin: auto;
             z-index: 10;
             background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .carousel img.active ~ .overlay {
-            display: block;
         }
 
         .overlay {
@@ -72,29 +77,18 @@
             z-index: 9;
         }
 
-        .carousel-controls {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-            font-size: 24px;
-            color: white;
-        }
-
-        .carousel-controls div {
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            cursor: pointer;
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="carousel">
-    <div class="carousel-inner">
-        <!-- Update the first image to the new one -->
+<div class="carousel-container">
+    <div class="title">All Quizzes</div>
+    <div class="image-grid">
         <img src="https://i.imgur.com/b5oxAMh.png" data-link="https://quizheadsboardgame.github.io/Horrorquizv4/">
         <img src="https://i.imgur.com/ioPzU6j.png" data-link="https://quizheadsboardgame.github.io/TaylorSwiftQuizv3/">
         <img src="https://i.imgur.com/09bbnYp.png" data-link="https://quizheadsboardgame.github.io/iconicmoviesv3/">
@@ -137,58 +131,12 @@
         <img src="https://i.imgur.com/gqkwTyw.png" data-link="https://quizheadsboardgame.github.io/sitcomsquizv2/">
         <img src="https://i.imgur.com/bTO5PRv.png" data-link="https://quizheadsboardgame.github.io/oscarwinnersv4/">
     </div>
-
-    <div class="carousel-controls">
-        <div class="prev">❮</div>
-        <div class="next">❯</div>
-    </div>
-
     <div class="overlay"></div>
 </div>
 
 <script>
-    let currentIndex = 0;
-    const carouselInner = document.querySelector('.carousel-inner');
-    const images = document.querySelectorAll('.carousel img');
+    const images = document.querySelectorAll('.image-grid img');
     const overlay = document.querySelector('.overlay');
-
-    // Touch swipe functionality
-    let startX;
-
-    carouselInner.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    carouselInner.addEventListener('touchend', (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diffX = startX - endX;
-
-        if (Math.abs(diffX) > 30) {
-            if (diffX > 0) {
-                nextImage();
-            } else {
-                prevImage();
-            }
-        }
-    });
-
-    function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        updateCarousel();
-    }
-
-    function prevImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        updateCarousel();
-    }
-
-    function updateCarousel() {
-        carouselInner.style.transition = 'transform 0.3s ease-in-out';
-        carouselInner.style.transform = `translateX(${-currentIndex * (100 + 20)}px)`;
-    }
-
-    document.querySelector('.next').addEventListener('click', nextImage);
-    document.querySelector('.prev').addEventListener('click', prevImage);
 
     images.forEach(image => {
         image.addEventListener('click', () => {
@@ -208,9 +156,6 @@
         images.forEach(image => image.classList.remove('active'));
         overlay.style.display = 'none';
     });
-
-    // Set initial carousel position
-    updateCarousel();
 </script>
 
 </body>
