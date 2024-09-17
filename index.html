@@ -21,30 +21,31 @@
             display: flex;
             overflow: hidden;
             width: 100%;
-            max-width: 800px;
+            max-width: 90vw; /* Adjusted for better fit on mobile */
             position: relative;
         }
 
         .carousel-inner {
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.3s ease-in-out; /* Smooth transition */
+            will-change: transform;
         }
 
         .carousel img {
             width: 100px;
             height: auto;
             margin: 10px;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .carousel img:hover {
-            transform: scale(1.1);
+            transform: scale(1.05); /* Slightly larger on hover */
         }
 
         .carousel img.active {
-            width: auto;
+            width: 80vw; /* Adjusted to fit well on different screen sizes */
             height: auto;
             position: fixed;
             left: 0;
@@ -78,16 +79,15 @@
             display: flex;
             justify-content: space-between;
             transform: translateY(-50%);
+            font-size: 24px;
+            color: white;
         }
 
         .carousel-controls div {
             background-color: rgba(0, 0, 0, 0.5);
             padding: 10px;
             cursor: pointer;
-            color: white;
-            font-size: 18px;
         }
-
     </style>
 </head>
 <body>
@@ -137,7 +137,7 @@
         <img src="https://i.imgur.com/gqkwTyw.png" data-link="https://quizheadsboardgame.github.io/sitcomsquizv2/">
         <img src="https://i.imgur.com/bTO5PRv.png" data-link="https://quizheadsboardgame.github.io/oscarwinnersv4/">
     </div>
-    
+
     <div class="carousel-controls">
         <div class="prev">❮</div>
         <div class="next">❯</div>
@@ -152,43 +152,65 @@
     const images = document.querySelectorAll('.carousel img');
     const overlay = document.querySelector('.overlay');
 
-    // Swipe functionality
-    document.querySelector('.next').addEventListener('click', () => {
+    // Touch swipe functionality
+    let startX;
+
+    carouselInner.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    carouselInner.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+
+        if (Math.abs(diffX) > 30) {
+            if (diffX > 0) {
+                nextImage();
+            } else {
+                prevImage();
+            }
+        }
+    });
+
+    function nextImage() {
         currentIndex = (currentIndex + 1) % images.length;
         updateCarousel();
-    });
-
-    document.querySelector('.prev').addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        updateCarousel();
-    });
-
-    // Infinite looping by duplicating first and last images
-    function updateCarousel() {
-        const offset = currentIndex * -120;
-        carouselInner.style.transition = 'transform 0.5s ease-in-out';
-        carouselInner.style.transform = `translateX(${offset}px)`;
     }
 
-    // Click to expand image
+    function prevImage() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        updateCarousel();
+    }
+
+    function updateCarousel() {
+        carouselInner.style.transition = 'transform 0.3s ease-in-out';
+        carouselInner.style.transform = `translateX(${-currentIndex * (100 + 20)}px)`;
+    }
+
+    document.querySelector('.next').addEventListener('click', nextImage);
+    document.querySelector('.prev').addEventListener('click', prevImage);
+
     images.forEach(image => {
         image.addEventListener('click', () => {
-            image.classList.toggle('active');
             if (image.classList.contains('active')) {
+                image.classList.remove('active');
+                overlay.style.display = 'none';
+            } else {
+                images.forEach(img => img.classList.remove('active'));
+                image.classList.add('active');
                 overlay.style.display = 'block';
-                setTimeout(() => {
-                    window.location.href = image.dataset.link;
-                }, 1000);  // Redirect to the link after a second
+                window.location.href = image.dataset.link;
             }
         });
     });
 
-    // Hide overlay and close expanded image
     overlay.addEventListener('click', () => {
         images.forEach(image => image.classList.remove('active'));
         overlay.style.display = 'none';
     });
 
+    // Set initial carousel position
+    updateCarousel();
 </script>
 
 </body>
