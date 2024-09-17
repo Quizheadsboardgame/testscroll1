@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel with Swipe</title>
+    <style>
+        body {
+            background-color: #0CC0DF;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100px;
+            height: auto;
+            margin: 10px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel img:hover {
+            transform: scale(1.1);
+        }
+
+        .carousel img.active {
+            width: auto;
+            height: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel img.active ~ .overlay {
+            display: block;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 9;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .carousel-controls div {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="carousel">
+    <div class="carousel-inner">
+        <!-- Update the first image to the new one -->
+        <img src="https://i.imgur.com/b5oxAMh.png" data-link="https://quizheadsboardgame.github.io/Horrorquizv4/">
+        <img src="https://i.imgur.com/ioPzU6j.png" data-link="https://quizheadsboardgame.github.io/TaylorSwiftQuizv3/">
+        <img src="https://i.imgur.com/09bbnYp.png" data-link="https://quizheadsboardgame.github.io/iconicmoviesv3/">
+        <img src="https://imgur.com/gGOAenD.png" data-link="https://quizheadsboardgame.github.io/AEWv2/">
+        <img src="https://i.imgur.com/Kxac95Y.png" data-link="https://quizheadsboardgame.github.io/wwequizv2/">
+        <img src="https://i.imgur.com/Ba0wMT8.png" data-link="https://quizheadsboardgame.github.io/georgemichealv2/">
+        <img src="https://i.imgur.com/XhwUpeq.png" data-link="https://quizheadsboardgame.github.io/transformersquizv2/">
+        <img src="https://i.imgur.com/J3OIvZt.png" data-link="https://quizheadsboardgame.github.io/HarryPotterv2/">
+        <img src="https://i.imgur.com/nOaemXZ.png" data-link="https://quizheadsboardgame.github.io/ClassicHollywoodMoviesv2/">
+        <img src="https://i.imgur.com/ncuuRyP.png" data-link="https://quizheadsboardgame.github.io/StarWarsQuizv4/">
+        <img src="https://i.imgur.com/ikVOSPJ.png" data-link="https://quizheadsboardgame.github.io/Animatedmoviesv2/">
+        <img src="https://i.imgur.com/OOnO7zj.png" data-link="https://quizheadsboardgame.github.io/StreamingORIGNALSV3/">
+        <img src="https://i.imgur.com/uYAO29v.png" data-link="https://quizheadsboardgame.github.io/foreignV1/">
+        <img src="https://i.imgur.com/STQJLCC.png" data-link="https://quizheadsboardgame.github.io/SuperherosBlockbustersV3/">
+        <img src="https://i.imgur.com/P4C9K84.png" data-link="https://quizheadsboardgame.github.io/cultclassicv2/">
+        <img src="https://i.imgur.com/0VHikkE.png" data-link="https://quizheadsboardgame.github.io/mustwatchtvv2/">
+        <img src="https://i.imgur.com/sRXWFyp.png" data-link="https://quizheadsboardgame.github.io/iconic90stvV2/">
+        <img src="https://i.imgur.com/9yoUTqk.png" data-link="https://quizheadsboardgame.github.io/CultTvv2/">
+        <img src="https://i.imgur.com/78alVrU.png" data-link="https://quizheadsboardgame.github.io/hiphopv1/">
+        <img src="https://i.imgur.com/V3X11VJ.png" data-link="https://quizheadsboardgame.github.io/hitmusicv1/">
+        <img src="https://i.imgur.com/5iojhQQ.png" data-link="https://quizheadsboardgame.github.io/popmusicv1/">
+        <img src="https://i.imgur.com/Oi7MEDz.png" data-link="https://quizheadsboardgame.github.io/rocklegendsquizv2/">
+        <img src="https://i.imgur.com/NXIYM6L.png" data-link="https://quizheadsboardgame.github.io/80smusicquizv2/">
+        <img src="https://i.imgur.com/JQFXsaJ.png" data-link="https://quizheadsboardgame.github.io/Altenativemusicv2/">
+        <img src="https://i.imgur.com/A1YnwNG.png" data-link="https://quizheadsboardgame.github.io/oasisquizv2/">
+        <img src="https://i.imgur.com/FFMMvkh.png" data-link="https://quizheadsboardgame.github.io/uksportchampionsv2/">
+        <img src="https://i.imgur.com/dHDZNij.png" data-link="https://quizheadsboardgame.github.io/olymicsv2/">
+        <img src="https://i.imgur.com/RvJZCcw.png" data-link="https://quizheadsboardgame.github.io/worldcupsandeurosv2/">
+        <img src="https://i.imgur.com/3kHYmTn.png" data-link="https://quizheadsboardgame.github.io/ChildrensTvquizV2/">
+        <img src="https://i.imgur.com/0ZpYRqa.png" data-link="https://quizheadsboardgame.github.io/10thingsv2/">
+        <img src="https://i.imgur.com/L7Dc8Li.png" data-link="https://quizheadsboardgame.github.io/GeneralKnowledgev5/">
+        <img src="https://i.imgur.com/oVD2GzE.png" data-link="https://quizheadsboardgame.github.io/Disneymoviesv3/">
+        <img src="https://i.imgur.com/8CWDdKP.png" data-link="https://quizheadsboardgame.github.io/famousmoviequotesv3/">
+        <img src="https://i.imgur.com/N392h4O.png" data-link="https://quizheadsboardgame.github.io/antiheroesv3/">
+        <img src="https://i.imgur.com/YHDS1tl.png" data-link="https://quizheadsboardgame.github.io/onehitv3/">
+        <img src="https://i.imgur.com/66kZVj7.png" data-link="https://quizheadsboardgame.github.io/famouseventsv1/">
+        <img src="https://i.imgur.com/6LmVu4P.png" data-link="https://quizheadsboardgame.github.io/nonenglishtv1/">
+        <img src="https://i.imgur.com/HDU8HOa.png" data-link="https://quizheadsboardgame.github.io/realityTVV2/">
+        <img src="https://i.imgur.com/nYrAzFj.png" data-link="https://quizheadsboardgame.github.io/limited-series/">
+        <img src="https://i.imgur.com/gqkwTyw.png" data-link="https://quizheadsboardgame.github.io/sitcomsquizv2/">
+        <img src="https://i.imgur.com/bTO5PRv.png" data-link="https://quizheadsboardgame.github.io/oscarwinnersv4/">
+    </div>
+    
+    <div class="carousel-controls">
+        <div class="prev">❮</div>
+        <div class="next">❯</div>
+    </div>
+
+    <div class="overlay"></div>
+</div>
+
+<script>
+    let currentIndex = 0;
+    const carouselInner = document.querySelector('.carousel-inner');
+    const images = document.querySelectorAll('.carousel img');
+    const overlay = document.querySelector('.overlay');
+
+    // Swipe functionality
+    document.querySelector('.next').addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        updateCarousel();
+    });
+
+    document.querySelector('.prev').addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        updateCarousel();
+    });
+
+    // Infinite looping by duplicating first and last images
+    function updateCarousel() {
+        const offset = currentIndex * -120;
+        carouselInner.style.transition = 'transform 0.5s ease-in-out';
+        carouselInner.style.transform = `translateX(${offset}px)`;
+    }
+
+    // Click to expand image
+    images.forEach(image => {
+        image.addEventListener('click', () => {
+            image.classList.toggle('active');
+            if (image.classList.contains('active')) {
+                overlay.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = image.dataset.link;
+                }, 1000);  // Redirect to the link after a second
+            }
+        });
+    });
+
+    // Hide overlay and close expanded image
+    overlay.addEventListener('click', () => {
+        images.forEach(image => image.classList.remove('active'));
+        overlay.style.display = 'none';
+    });
+
+</script>
+
+</body>
+</html>
